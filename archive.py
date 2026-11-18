@@ -4,6 +4,12 @@ from pathlib import Path
 from calibration.catalog import get_curve, register_curve
 from calibration.frozen import DirectCurve
 from calibration.records import ensure_curve_schema
+from clocks.catalog import register_clock
+from clocks.export import export_clock_report
+from clocks.plans import build_clock_report
+from clocks.reader import read_clock_report
+from clocks.records import ensure_clock_schema
+from clocks.storage import ensure_clock_report_schema
 from observations.intake import put_batch
 from observations.revisions import BatchRevision, RevisionRef, get_current_revision, get_revision
 from observations.storage import ensure_observation_schema
@@ -39,6 +45,8 @@ class Archive:
             ensure_curve_schema(self._connection)
             ensure_observation_schema(self._connection)
             ensure_report_schema(self._connection)
+            ensure_clock_schema(self._connection)
+            ensure_clock_report_schema(self._connection)
 
     def register_curve(self, curve_id: str, source: str, target: str, knots: object) -> DirectCurve:
         return register_curve(self._connection, curve_id, source, target, knots)
@@ -70,3 +78,19 @@ class Archive:
         return assess_report(
             self._connection, report_id, minimum_coverage, minimum_integral, maximum_integral,
         )
+
+    def register_clock(self, clock_id: str, batch_revision: RevisionRef, device_log: object,
+                       reference_log: object, rate_range: object) -> dict:
+        return register_clock(
+            self._connection, clock_id, batch_revision, device_log, reference_log, rate_range,
+        )
+
+    def build_clock_report(self, report_id: str, clock_id: str, curve_id: str,
+                           target: str, window: object) -> dict:
+        return build_clock_report(self._connection, report_id, clock_id, curve_id, target, window)
+
+    def read_clock_report(self, report_id: str) -> dict:
+        return read_clock_report(self._connection, report_id)
+
+    def export_clock_report(self, report_id: str) -> str:
+        return export_clock_report(self._connection, report_id)

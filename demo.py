@@ -4,6 +4,7 @@ from fractions import Fraction
 from pathlib import Path
 
 from archive import Archive
+from clock_cases import check_clock
 
 
 def main() -> None:
@@ -67,6 +68,8 @@ def main() -> None:
     }, separators=(',', ':')))
     print(delivered)
     print(delivered_new)
+    print('POINTWISE_CLOCK_CHAIN')
+    check_clock(show=True)
 
 
 if __name__ == '__main__':

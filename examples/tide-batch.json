@@ -1,0 +1,7 @@
+{
+  "batch_id": "morning-tide",
+  "scale": "A",
+  "initial": [[0, 0], [1, 1]],
+  "corrected": [[0, 0], [1, 0]],
+  "window": [0, 1]
+}
